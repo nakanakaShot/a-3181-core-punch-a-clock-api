@@ -8,6 +8,10 @@
 *.war
 *.ear
 
+# Excludes only gradle-wrapper.jar from .gitignore
+# See here: https://docs.gradle.org/current/userguide/gradle_wrapper.html
+!**/gradle/wrapper/gradle-wrapper.jar
+
 #Gradle temporary files
 target/
 
