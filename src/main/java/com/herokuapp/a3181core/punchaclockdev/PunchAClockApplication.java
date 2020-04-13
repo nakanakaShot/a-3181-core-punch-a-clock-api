@@ -1,4 +1,4 @@
-package com.herokuapp.a3181core.com.herokuapp.a3181core.punchaclockdev;
+package com.herokuapp.a3181core.punchaclockdev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
