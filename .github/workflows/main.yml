@@ -25,7 +25,7 @@ jobs:
           java-version: ${{ matrix.jdk-version }}
 
       - name: Pull latest branch ${{ github.base_ref }}
-        run: git pull ${{ github.base_ref }}
+        run: git pull origin ${{ github.base_ref }}
 
       - name: Test ${{ github.run_id }}
         run: ./gradlew build -x bootjar
