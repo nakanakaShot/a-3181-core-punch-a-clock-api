@@ -19,6 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Verify signed gradle-wrapper.jar
+        uses: gradle/wrapper-validation-action@v1.0.3
+
       - name: Set up JDK ${{ matrix.jdk-version }}
         uses: actions/setup-java@v1
         with:
