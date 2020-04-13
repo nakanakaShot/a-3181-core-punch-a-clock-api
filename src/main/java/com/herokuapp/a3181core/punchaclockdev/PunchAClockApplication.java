@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class PunchAClockApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(PunchAClockApplication.class, args);
     }
