@@ -15,7 +15,7 @@ class SampleTests {
     static Stream<Arguments> demoProvider(){
         return Stream.of(
                 Arguments.of(1,1,2),
-                Arguments.of(2,2,5)
+                Arguments.of(2,2,4)
         );
     }
 
@@ -24,10 +24,5 @@ class SampleTests {
     @DisplayName("Parameterizedテストのデモ")
     void demo(int i, int j, int expected){
         Assertions.assertEquals(expected,i+j);
-    }
-
-    @Test
-    void fail(){
-        Assertions.fail();
     }
 }
