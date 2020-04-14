@@ -13,7 +13,7 @@ public class HelloController {
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public String hello() {
-        LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime now = LocalDateTime.now();
         return "Hello World, Now " + now.format(timeFormat);
     }
 
