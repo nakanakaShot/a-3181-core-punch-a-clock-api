@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    LocalDateTime now = LocalDateTime.now();
-    DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public String hello() {
-
+        LocalDateTime now = LocalDateTime.now();
         return "Hello World, Now " + now.format(timeFormat);
     }
 
