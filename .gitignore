@@ -15,6 +15,9 @@
 #Gradle temporary files
 target/
 
+#findbugs out directory
+out/
+
 #Eclipse files
 **/.project
 **/.classpath
