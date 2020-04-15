@@ -30,6 +30,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
     // for JUnit
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.3.2'
     testCompile 'org.junit.jupiter:junit-jupiter-params:5.3.2'
