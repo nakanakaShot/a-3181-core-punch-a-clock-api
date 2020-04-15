@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloController {
+public class AttendController {
 
     private static final DateTimeFormatter timeFormat = DateTimeFormatter
         .ofPattern("uuuu/MM/dd HH:mm:ss");
 
     @RequestMapping(path = "/", method = {RequestMethod.GET,
         RequestMethod.POST})
-    public String hello(@RequestParam("name") String name) {
+    public String attend(@RequestParam("name") String name) {
         LocalDateTime now = LocalDateTime.now();
-        return "HelloWorld, Now " + now.format(timeFormat) + " YourName " + name;
+        return "Attend, starttime=" + now.format(timeFormat) + ", name=" + name;
     }
 
     @RequestMapping(path = "/header", method = {RequestMethod.GET,
