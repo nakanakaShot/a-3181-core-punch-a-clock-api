@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+    <!-- 読み込むファイルの文字コードを指定する -->
+    <property name="charset" value="UTF-8"/>
+    <!-- Checkstyle違反時のエラーレベルの設定 -->
+    <property name="severity" value="error"/>
+
+    <module name="TreeWalker">
+        <!-- 字下げの設定 -->
+        <module name="Indentation">
+            <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+            <property name="throwsIndent" value="4"/>
+            <property name="lineWrappingIndentation" value="4"/>
+            <property name="arrayInitIndent" value="4"/>
+            <property name="forceStrictCondition" value="false"/>
+        </module>
+    </module>
+</module>
