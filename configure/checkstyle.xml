@@ -7,7 +7,7 @@
     <!-- 読み込むファイルの文字コードを指定する -->
     <property name="charset" value="UTF-8"/>
     <!-- Checkstyle違反時のエラーレベルの設定 -->
-    <property name="severity" value="warning"/>
+    <property name="severity" value="error"/>
 
     <module name="TreeWalker">
         <!-- 字下げの設定 -->
