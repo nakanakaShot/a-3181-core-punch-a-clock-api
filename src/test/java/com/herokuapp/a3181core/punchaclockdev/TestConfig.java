@@ -6,6 +6,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan({"com.herokuapp.a3181core.punchaclockdev"})
 public class TestConfig {
-//プッシュテスト
+//プッシュテスト２
 }
 
