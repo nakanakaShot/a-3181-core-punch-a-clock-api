@@ -1,7 +1,9 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
+import com.herokuapp.a3181core.punchaclockdev.domain.service.AttendService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class AttendController {
+
+    private final AttendService attendService;
 
     private static final DateTimeFormatter timeFormat = DateTimeFormatter
         .ofPattern("uuuu/MM/dd HH:mm:ss");
@@ -19,6 +24,10 @@ public class AttendController {
         RequestMethod.POST})
     public String attend(@RequestParam("name") String name) {
         LocalDateTime now = LocalDateTime.now();
+
+        //repositoryへパラメータを渡す
+        attendService.parameterBridge(name);
+
         return "Attend, starttime=" + now.format(timeFormat) + ", name=" + name;
     }
 
