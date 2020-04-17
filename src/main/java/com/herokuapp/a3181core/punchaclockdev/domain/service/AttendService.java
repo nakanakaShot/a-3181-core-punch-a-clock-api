@@ -11,10 +11,12 @@ public class AttendService {
 
     private final AttendRepository attendRepository;
 
-    public void parameterBridge(String name) {
+    public String parameterBridge(String name) {
+
         if (isNotEmpty(name)) {
-            attendRepository.getParameter(name);
+            return attendRepository.getParameter(name);
         }
+        throw new RuntimeException();
     }
 
     private boolean isNotEmpty(String name) {
