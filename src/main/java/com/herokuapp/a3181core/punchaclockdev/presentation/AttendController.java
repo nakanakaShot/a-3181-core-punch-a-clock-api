@@ -25,10 +25,8 @@ public class AttendController {
     public String attend(@RequestParam("name") String name) {
         LocalDateTime now = LocalDateTime.now();
 
-        //repositoryへパラメータを渡す
-        attendService.parameterBridge(name);
-
-        return "Attend, starttime=" + now.format(timeFormat) + ", name=" + name;
+        return "Attend, starttime=" + now.format(timeFormat) + ", name=" + name + ", repository="
+            + attendService.parameterBridge(name);
     }
 
     @RequestMapping(path = "/header", method = {RequestMethod.GET,
