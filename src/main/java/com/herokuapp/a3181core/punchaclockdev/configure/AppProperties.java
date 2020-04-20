@@ -1,20 +1,27 @@
 package com.herokuapp.a3181core.punchaclockdev.configure;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "app")
-@Value
 @ConstructorBinding
+@Value
+@Validated
 public class AppProperties {
 
-    private final Slack slack;
+    @NotNull
+    private Slack slack;
 
     @Value
     public static class Slack {
 
-        private final String appToken;
-        private final String channelPostedToId;
+        @NotBlank
+        private String appToken;
+        @NotBlank
+        private String channelPostedToId;
     }
 }
