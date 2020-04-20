@@ -1,5 +1,6 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
+import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
 import com.herokuapp.a3181core.punchaclockdev.domain.service.AttendService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AttendController {
 
     private final AttendService attendService;
+    private final AppProperties properties;
 
     private static final DateTimeFormatter timeFormat = DateTimeFormatter
         .ofPattern("uuuu/MM/dd HH:mm:ss");
@@ -27,6 +29,9 @@ public class AttendController {
 
         //repositoryへパラメータを渡す
         attendService.parameterBridge(name);
+
+        // 実験的に入れたコードなので後で消します
+        System.out.println(properties.getSlack().getAppToken());
 
         return "Attend, starttime=" + now.format(timeFormat) + ", name=" + name;
     }
