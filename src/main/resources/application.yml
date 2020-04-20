@@ -3,5 +3,5 @@ server:
 
 app:
   slack:
-    app-token: ${SLACK_APP_TOKEN}
-    channel-posted-to-id: ${SLACK_CHANNEL_POSTED_TO_ID}
+    app-token: ${SLACK_APP_TOKEN:}
+    channel-posted-to-id: ${SLACK_CHANNEL_POSTED_TO_ID:}
