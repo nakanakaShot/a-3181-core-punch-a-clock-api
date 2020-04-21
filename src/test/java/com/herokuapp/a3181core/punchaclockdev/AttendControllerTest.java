@@ -1,7 +1,9 @@
 package com.herokuapp.a3181core.punchaclockdev;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,17 +38,6 @@ public class AttendControllerTest {
     @MockBean
     AttendService attendService;
 
-//    @Test
-//    void nameTest() throws Exception {
-//        when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
-//        this.mockMvc.perform(get("/?name=hoge"))
-//            .andDo(print()).andExpect(status().isOk())
-//            .andExpect(content().string(containsString("hoge")))
-//            .andExpect(content().string(containsString("Goodbye_World")));
-//
-//        verify(attendService, times(1)).parameterBridge("hoge");
-//    }
-    
     @ParameterizedTest
     @CsvSource({
         "/?name=hoge, hoge", //
@@ -57,7 +48,7 @@ public class AttendControllerTest {
         "/?name=,''", //
         "/?name=%E3%81%82, %E3%81%82", //
     })
-    void nameTest(String query, String name) throws Exception {
+    void nameNormalTest(String query, String name) throws Exception {
         //serviceからGoodbye_Worldをcontrollerに入力した想定のテストをしたい(設定しないとnull)
         //mockが機能しているのか、実装の方が動いているのか判断するためにGoodbye_Worldを返させたい
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
@@ -74,6 +65,16 @@ public class AttendControllerTest {
         //controllerからserviceへの出力した際に、クエリの中身を引数として渡し、
         //parameterBridgeを1度通過するか検証
         verify(attendService, times(1)).parameterBridge(name);
+    }
+
+    //異常系テスト
+    @Test
+    void nameErrorTest() throws Exception {
+        when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
+        this.mockMvc.perform(get("/"))
+            .andDo(print()).andExpect(status().isBadRequest());
+
+        verify(attendService, never()).parameterBridge(any());
     }
 
     @Test
