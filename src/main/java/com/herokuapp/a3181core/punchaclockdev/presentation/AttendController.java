@@ -1,6 +1,7 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.service.AttendService;
+import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AttendController {
 
     private final AttendService attendService;
+    private final ClockProvider clockProvider;
 
-    private static final DateTimeFormatter timeFormat = DateTimeFormatter
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter
         .ofPattern("uuuu/MM/dd HH:mm:ss");
 
     @RequestMapping(path = "/", method = {RequestMethod.GET,
         RequestMethod.POST})
     public String attend(@RequestParam("name") String name) {
-        LocalDateTime now = LocalDateTime.now();
 
-        return "Attend, starttime=" + now.format(timeFormat) + ", name=" + name + ", repository="
+        return "Attend, starttime="
+            + LocalDateTime.now(clockProvider.now()).format(TIME_FORMAT)
+            + ", name=" + name
+            + ", repository="
             + attendService.parameterBridge(name);
     }
 

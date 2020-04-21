@@ -13,6 +13,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.service.AttendService;
+import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +30,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 @AutoConfigureMockMvc
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ServiceMockTest")
+/**
+ * TODO
+ */
 public class AttendControllerTest {
 
     @Autowired
@@ -37,6 +45,8 @@ public class AttendControllerTest {
 
     @MockBean
     AttendService attendService;
+    @MockBean
+    ClockProvider clockProvider;
 
     @ParameterizedTest
     @CsvSource({
@@ -49,18 +59,24 @@ public class AttendControllerTest {
         "/?name=%E3%81%82, %E3%81%82", //
     })
     void nameNormalTest(String query, String name) throws Exception {
+
         //serviceからGoodbye_Worldをcontrollerに入力した想定のテストをしたい(設定しないとnull)
         //mockが機能しているのか、実装の方が動いているのか判断するためにGoodbye_Worldを返させたい
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
+        when(clockProvider.now())
+            .thenReturn(
+                Clock.fixed(Instant.parse("2018-04-29T10:15:30.00Z"), ZoneId.of("Asia/Tokyo")));
 
         //mockmvcからcontrollerにqueryを投げさせる
         this.mockMvc.perform(get(query))
-
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString(name)))
-            //Goodbye_Worldがcontrollerから出力されることを確認したい
-            .andExpect(content().string(containsString("Goodbye_World")));
+            //全文比較したい
+            .andExpect(content().string(
+                "Attend, starttime=2018/04/29 19:15:30" +
+                    ", name=" +
+                    name +
+                    ", repository=Goodbye_World"));
 
         //controllerからserviceへの出力した際に、クエリの中身を引数として渡し、
         //parameterBridgeを1度通過するか検証
