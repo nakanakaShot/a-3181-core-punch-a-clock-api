@@ -20,5 +20,41 @@
             <property name="arrayInitIndent" value="4"/>
             <property name="forceStrictCondition" value="false"/>
         </module>
+        <!-- ファイルにタブが無いかどうか -->
+        <module name="FileTabCharacter">
+            <property name="eachLine" value="true"/>
+        </module>
+        <!-- ファイル名とクラス名の一致 -->
+        <module name="OuterTypeFilename"/>
+        <!-- importに*が含まれていないかどうか -->
+        <module name="AvoidStarImport"/>
+        <!-- トップレベルクラスが自身のソースファイル以外で定義されていないか -->
+        <module name="OneTopLevelClass"/>
+        <!-- 空ブロックが無いか -->
+        <module name="EmptyBlock">
+            <property name="option" value="TEXT"/>
+            <property name="tokens"
+                value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+        </module>
+        <!-- 修飾子の順番がJavaの推奨に従っているか -->
+        <module name="ModifierOrder"/>
+        <!-- package命名規則 -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <message key="name.invalidPattern"
+                value="Package name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 型の命名規則 -->
+        <module name="TypeName">
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF"/>
+            <message key="name.invalidPattern"
+                value="Type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- メンバ変数の命名規則 -->
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+                value="Member name ''{0}'' must match pattern ''{1}''."/>
+        </module>
     </module>
 </module>
