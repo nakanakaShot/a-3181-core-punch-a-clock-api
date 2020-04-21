@@ -1,6 +1,5 @@
 package com.herokuapp.a3181core.punchaclockdev.configure;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +21,7 @@ public class AppProperties {
     @Getter
     public static class Slack {
 
-        @NotBlank
         private final String appToken;
-        @NotBlank
         private final String channelPostedToId;
     }
 }
