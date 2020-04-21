@@ -2,6 +2,9 @@ server:
   port: 8080
 
 app:
+  # SlackAPIとの接続に関する設定
   slack:
+    # SlackAPIで発行したtoken
     app-token: ${SLACK_APP_TOKEN:}
+    # 投稿先チャンネルのID
     channel-posted-to-id: ${SLACK_CHANNEL_POSTED_TO_ID:}
