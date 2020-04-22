@@ -1,14 +1,16 @@
 package com.herokuapp.a3181core.punchaclockdev.shared;
 
 import java.time.Clock;
-import java.time.ZoneId;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ClockProvider {
 
-    public Clock now() {
-        return Clock.system(ZoneId.of("Asia/Tokyo"));
-    }
+    private final Clock clock;
 
+    public Clock now() {
+        return clock;
+    }
 }
