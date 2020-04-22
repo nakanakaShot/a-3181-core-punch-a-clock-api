@@ -38,23 +38,89 @@
         </module>
         <!-- 修飾子の順番がJavaの推奨に従っているか -->
         <module name="ModifierOrder"/>
-        <!-- package命名規則 -->
+        <!-- 各種命名規則 -->
         <module name="PackageName">
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
             <message key="name.invalidPattern"
                 value="Package name ''{0}'' must match pattern ''{1}''."/>
         </module>
-        <!-- 型の命名規則 -->
         <module name="TypeName">
             <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF"/>
             <message key="name.invalidPattern"
                 value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
-        <!-- メンバ変数の命名規則 -->
         <module name="MemberName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
                 value="Member name ''{0}'' must match pattern ''{1}''."/>
         </module>
+        <module name="ParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                value="Parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="LambdaParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                value="Lambda parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="CatchParameterName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                value="Catch parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="LocalVariableName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                value="Local variable name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="ClassTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                value="Class type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="MethodTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                value="Method type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                value="Interface type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 総称型の宣言<>にスペースが入っていないか -->
+        <module name="GenericWhitespace">
+            <message key="ws.followed"
+                value="GenericWhitespace ''{0}'' is followed by whitespace."/>
+            <message key="ws.preceded"
+                value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
+            <message key="ws.illegalFollow"
+                value="GenericWhitespace ''{0}'' should followed by whitespace."/>
+            <message key="ws.notPreceded"
+                value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
+        </module>
+        <!-- オーバーロードメソッドがまとまって宣言されていること -->
+        <module name="OverloadMethodsDeclarationOrder"/>
+        <!-- 変数を宣言してから使用するまでのSTEP数が規規定通りか -->
+        <module name="VariableDeclarationUsageDistance">
+            <property name="allowedDistance" value="5"/>
+            <property name="ignoreVariablePattern" value=""/>
+            <property name="validateBetweenScopes" value="false"/>
+            <property name="ignoreFinal" value="true"/>
+        </module>
+        <!-- importの順序 -->
+        <module name="CustomImportOrder">
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="separateLineBetweenGroups" value="true"/>
+            <property name="customImportOrderRules" value="STATIC###THIRD_PARTY_PACKAGE"/>
+            <property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>
+        </module>
+        <!-- メソッドに対するJavadoc規則 -->
+        <module name="JavadocMethod"/>
+        <!-- Javadocの欠落チェック -->
+        <module name="MissingJavadocMethod"/>
+        <!-- Todoコメントが残っていないか -->
+        <module name="TodoComment"/>
     </module>
 </module>
