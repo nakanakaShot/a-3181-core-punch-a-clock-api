@@ -2,8 +2,10 @@ package com.herokuapp.a3181core.punchaclockdev;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class PunchAClockApplication {
 
     public static void main(String[] args) {
