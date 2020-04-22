@@ -9,6 +9,11 @@
     <!-- Checkstyle違反時のエラーレベルの設定 -->
     <property name="severity" value="error"/>
 
+    <!-- ファイルにタブが無いかどうか -->
+    <module name="FileTabCharacter">
+        <property name="eachLine" value="true"/>
+    </module>
+
     <module name="TreeWalker">
         <!-- 字下げの設定 -->
         <module name="Indentation">
@@ -19,10 +24,6 @@
             <property name="lineWrappingIndentation" value="4"/>
             <property name="arrayInitIndent" value="4"/>
             <property name="forceStrictCondition" value="false"/>
-        </module>
-        <!-- ファイルにタブが無いかどうか -->
-        <module name="FileTabCharacter">
-            <property name="eachLine" value="true"/>
         </module>
         <!-- ファイル名とクラス名の一致 -->
         <module name="OuterTypeFilename"/>
