@@ -11,6 +11,12 @@ public class AttendService {
 
     private final AttendRepository attendRepository;
 
+    /**
+     * nameを受け取り固定値を返す
+     *
+     * @param name : APIを試験的に作った時のgetパラメータのひとつ
+     * @return attendからもらう固定値
+     */
     public String parameterBridge(String name) {
 
         if (isNotEmpty(name)) {
