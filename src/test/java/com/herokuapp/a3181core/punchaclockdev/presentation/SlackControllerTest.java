@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class SlackControllerTest {
+class SlackControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -26,4 +26,17 @@ public class SlackControllerTest {
                 .string("出勤！おはようございます\uD83C\uDF1E"));
     }
 
+    @Test
+    void returnPostTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/return"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("休憩終了！適度に頑張りましょう\uD83C\uDFC3\u200D♂️"));
+    }
+
+    @Test
+    void returnGetTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/slack/return"))
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
 }
