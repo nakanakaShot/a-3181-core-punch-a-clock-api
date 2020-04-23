@@ -1,4 +1,4 @@
-package com.herokuapp.a3181core.punchaclockdev;
+package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,13 +30,13 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ServiceMockTest")
-public class AttendControllerTest {
+class AttendControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    AttendService attendService;
+    private AttendService attendService;
 
     @ParameterizedTest
     @CsvSource({
