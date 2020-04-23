@@ -20,10 +20,17 @@ public class SlackControllerTest {
 
     @Test
     void attendTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/slack/attend"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/attend"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content()
                 .string("出勤！おはようございます\uD83C\uDF1E"));
     }
 
+    @Test
+    void dismissTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/dismiss"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("退勤！お疲れさまでした \uD83D\uDECF"));
+    }
 }
