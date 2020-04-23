@@ -20,6 +20,12 @@ public class AttendController {
     private static final DateTimeFormatter timeFormat = DateTimeFormatter
         .ofPattern("uuuu/MM/dd HH:mm:ss");
 
+    /**
+     * リクエストパラメータと固定値を連結するAPI
+     *
+     * @param name : 練習用リクエストパラメータ
+     * @return "/"に対するレスポンス文字列
+     */
     @RequestMapping(path = "/", method = {RequestMethod.GET,
         RequestMethod.POST})
     public String attend(@RequestParam("name") String name) {
@@ -29,6 +35,12 @@ public class AttendController {
             + attendService.parameterBridge(name);
     }
 
+    /**
+     * UserAgentを表示するAPI
+     *
+     * @param userAgent : リクエストしたUserAgent
+     * @return UserAgent
+     */
     @RequestMapping(path = "/header", method = {RequestMethod.GET,
         RequestMethod.POST})
     public String getRequestHeader(@RequestHeader(HttpHeaders.USER_AGENT) String userAgent) {
