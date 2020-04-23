@@ -3,6 +3,9 @@ package com.herokuapp.a3181core.punchaclockdev;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * ClockProvideのテスト
+ */
 public class ClockProviderTest {
 
     @Autowired

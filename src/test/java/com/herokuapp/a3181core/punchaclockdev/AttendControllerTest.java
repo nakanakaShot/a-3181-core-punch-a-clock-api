@@ -14,9 +14,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.herokuapp.a3181core.punchaclockdev.domain.service.AttendService;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,14 +27,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
-
+/**
+ * 出勤用コントローラのテスト
+ */
 @AutoConfigureMockMvc
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ServiceMockTest")
-/**
- * TODO
- */
 public class AttendControllerTest {
 
     @Autowired
@@ -48,6 +44,10 @@ public class AttendControllerTest {
     @MockBean
     ClockProvider clockProvider;
 
+
+    /**
+     * 出勤時_名前時刻の正常系テスト
+     */
     @ParameterizedTest
     @CsvSource({
         "/?name=hoge, hoge", //
@@ -58,14 +58,12 @@ public class AttendControllerTest {
         "/?name=,''", //
         "/?name=%E3%81%82, %E3%81%82", //
     })
-    void nameNormalTest(String query, String name) throws Exception {
+    public void nameNormalTest(String query, String name) throws Exception {
 
         //serviceからGoodbye_Worldをcontrollerに入力した想定のテストをしたい(設定しないとnull)
         //mockが機能しているのか、実装の方が動いているのか判断するためにGoodbye_Worldを返させたい
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
-        when(clockProvider.now())
-            .thenReturn(
-                Clock.fixed(Instant.parse("2018-04-29T10:15:30.00Z"), ZoneId.of("Asia/Tokyo")));
+        when(clockProvider.now()).thenReturn("2020-04-23T10:50:43");
 
         //mockmvcからcontrollerにqueryを投げさせる
         this.mockMvc.perform(get(query))
@@ -73,7 +71,7 @@ public class AttendControllerTest {
             .andExpect(status().isOk())
             //全文比較したい
             .andExpect(content().string(
-                "Attend, starttime=2018/04/29 19:15:30" +
+                "Attend, starttime=2020-04-23T10:50:43" +
                     ", name=" +
                     name +
                     ", repository=Goodbye_World"));
@@ -83,9 +81,11 @@ public class AttendControllerTest {
         verify(attendService, times(1)).parameterBridge(name);
     }
 
-    //異常系テスト
+    /**
+     * 出勤時異常系テスト
+     */
     @Test
-    void nameErrorTest() throws Exception {
+    public void nameErrorTest() throws Exception {
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
         this.mockMvc.perform(get("/"))
             .andDo(print()).andExpect(status().isBadRequest());
@@ -93,6 +93,9 @@ public class AttendControllerTest {
         verify(attendService, never()).parameterBridge(any());
     }
 
+    /**
+     * ヘッダー_正常系テスト
+     */
     @Test
     public void headerTest() throws Exception {
         this.mockMvc.perform(get("/header")
