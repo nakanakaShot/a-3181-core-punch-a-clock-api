@@ -4,12 +4,14 @@ import java.time.Clock;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * SpringBootが Clock型インスタンス をDIできるようにするためのconfigクラス
  */
 @Configuration
+@ComponentScan("com.herokuapp.a3181core.punchaclockdev")
 @RequiredArgsConstructor
 public class ClockConfig {
 
