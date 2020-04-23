@@ -78,7 +78,7 @@ public class AttendControllerTest {
     }
 
     @Test
-    public void headerTest() throws Exception {
+    void headerTest() throws Exception {
         this.mockMvc.perform(get("/header")
             .header(HttpHeaders.USER_AGENT, HttpHeaders.USER_AGENT))
             .andDo(print()).andExpect(status().isOk())
