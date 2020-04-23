@@ -37,6 +37,6 @@ class SlackControllerTest {
     @Test
     void returnGetTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/slack/return"))
-            .andExpect(MockMvcResultMatchers.status().isNotFound());
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 }
