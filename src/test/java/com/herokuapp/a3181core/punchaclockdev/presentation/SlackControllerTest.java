@@ -19,11 +19,17 @@ class SlackControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void attendTest() throws Exception {
+    void attendPostTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/slack/attend"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content()
                 .string("出勤！おはようございます\uD83C\uDF1E"));
+    }
+
+    @Test
+    void attendGetTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/slack/attend"))
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 
     @Test
@@ -41,10 +47,16 @@ class SlackControllerTest {
     }
 
     @Test
-    void dismissTest() throws Exception {
+    void dismissPostTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/slack/dismiss"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content()
                 .string("退勤！お疲れさまでした \uD83D\uDECF"));
+    }
+
+    @Test
+    void dismissGetTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/slack/dismiss"))
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 }
