@@ -21,6 +21,8 @@ public class ClockProvider {
 
     /**
      * 現在時刻をString型にフォーマット
+     *
+     * @return フォーマットをかけた現在時刻
      */
     public String now() {
         return LocalDateTime.now(clock).format(TIME_FORMAT);

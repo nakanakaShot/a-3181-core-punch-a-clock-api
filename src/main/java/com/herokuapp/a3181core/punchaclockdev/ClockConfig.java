@@ -19,6 +19,8 @@ public class ClockConfig {
 
     /**
      * コンポーネントにDIするとき(Autowired, final + RequiredArgsConstructor) これが呼ばれる
+     *
+     * @return 東京タイムゾーンの現在時刻
      */
     @Bean
     public Clock clock() {

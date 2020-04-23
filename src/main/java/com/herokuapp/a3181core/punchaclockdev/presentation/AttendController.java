@@ -21,21 +21,25 @@ public class AttendController {
     private final ClockProvider clockProvider;
 
     /**
-     * 出勤時に時刻や名前を返す
+     * リクエストパラメータと固定値を連結するAPI
+     *
+     * @param name : 練習用リクエストパラメータ
+     * @return "/"に対するレスポンス文字列
      */
     @RequestMapping(path = "/", method = {RequestMethod.GET,
         RequestMethod.POST})
     public String attend(@RequestParam("name") String name) {
 
         return "Attend, starttime="
-            + clockProvider.now()
-            + ", name=" + name
-            + ", repository="
-            + attendService.parameterBridge(name);
+            + clockProvider.now() + ", name=" + name + ", repository=" + attendService
+            .parameterBridge(name);
     }
 
     /**
-     * userAgentを返す練習
+     * UserAgentを表示するAPI
+     *
+     * @param userAgent : リクエストしたUserAgent
+     * @return UserAgent
      */
     @RequestMapping(path = "/header", method = {RequestMethod.GET,
         RequestMethod.POST})

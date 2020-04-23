@@ -1,4 +1,4 @@
-package com.herokuapp.a3181core.punchaclockdev;
+package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,19 +34,22 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ServiceMockTest")
-public class AttendControllerTest {
+class AttendControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    AttendService attendService;
+    private AttendService attendService;
     @MockBean
-    ClockProvider clockProvider;
+    private ClockProvider clockProvider;
 
 
     /**
      * 出勤時_名前時刻の正常系テスト
+     *
+     * @param query : エントリーポイント
+     * @param name  : nameの値
      */
     @ParameterizedTest
     @CsvSource({
@@ -58,7 +61,7 @@ public class AttendControllerTest {
         "/?name=,''", //
         "/?name=%E3%81%82, %E3%81%82", //
     })
-    public void nameNormalTest(String query, String name) throws Exception {
+    void nameNormalTest(String query, String name) throws Exception {
 
         //serviceからGoodbye_Worldをcontrollerに入力した想定のテストをしたい(設定しないとnull)
         //mockが機能しているのか、実装の方が動いているのか判断するためにGoodbye_Worldを返させたい
@@ -71,10 +74,8 @@ public class AttendControllerTest {
             .andExpect(status().isOk())
             //全文比較したい
             .andExpect(content().string(
-                "Attend, starttime=2020-04-23T10:50:43" +
-                    ", name=" +
-                    name +
-                    ", repository=Goodbye_World"));
+                "Attend, starttime=2020-04-23T10:50:43" + ", name=" + name
+                    + ", repository=Goodbye_World"));
 
         //controllerからserviceへの出力した際に、クエリの中身を引数として渡し、
         //parameterBridgeを1度通過するか検証
@@ -85,7 +86,7 @@ public class AttendControllerTest {
      * 出勤時異常系テスト
      */
     @Test
-    public void nameErrorTest() throws Exception {
+    void nameErrorTest() throws Exception {
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
         this.mockMvc.perform(get("/"))
             .andDo(print()).andExpect(status().isBadRequest());
@@ -97,7 +98,7 @@ public class AttendControllerTest {
      * ヘッダー_正常系テスト
      */
     @Test
-    public void headerTest() throws Exception {
+    void headerTest() throws Exception {
         this.mockMvc.perform(get("/header")
             .header(HttpHeaders.USER_AGENT, HttpHeaders.USER_AGENT))
             .andDo(print()).andExpect(status().isOk())
