@@ -16,13 +16,13 @@ import org.springframework.test.context.ContextConfiguration;
  */
 @SpringBootTest
 @ContextConfiguration(classes = ClockConfig.class)
-public class ClockProviderTest {
+class ClockProviderTest {
 
     @Autowired
     private ClockProvider clockProvider;
 
-    ClockProvider fixedClockProvider = new ClockProvider(
-        Clock.fixed(Instant.parse("2018-04-29T10:15:30+09:00:00"), ZoneId.of("Asia/Tokyo")));
+    private final ClockProvider fixedClockProvider = new ClockProvider(
+        Clock.fixed(Instant.parse("2018-04-29T10:15:30.00Z"), ZoneId.of("Asia/Tokyo")));
 
     /**
      * JSTでClockがインスタンス化されているかのテスト
@@ -38,7 +38,7 @@ public class ClockProviderTest {
      */
     @Test
     void timeFormatTest() {
-        assertEquals("2018/04/29 10:15:30", fixedClockProvider.now());
+        assertEquals("2018/04/29 19:15:30", fixedClockProvider.now());
 
     }
 }
