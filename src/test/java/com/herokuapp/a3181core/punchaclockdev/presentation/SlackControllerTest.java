@@ -27,6 +27,20 @@ class SlackControllerTest {
     }
 
     @Test
+    void breakPostTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/break"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("休憩開始！リラックスしましょう\uD83D\uDE0A"));
+    }
+
+    @Test
+    void breakGetTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/slack/return"))
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
+
+    @Test
     void returnPostTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/slack/return"))
             .andExpect(MockMvcResultMatchers.status().isOk())
