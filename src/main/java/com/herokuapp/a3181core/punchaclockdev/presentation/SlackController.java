@@ -18,6 +18,16 @@ public class SlackController {
         return "出勤！おはようございます\uD83C\uDF1E";
     }
     /**
+     * 休憩開始コメントを返すAPI
+     *
+     * @return 固定値
+     */
+    @RequestMapping(path = "/slack/break", method = RequestMethod.POST)
+    public String breaked() {
+        return "休憩開始！リラックスしましょう\uD83D\uDE0A";
+    }
+
+    /**
      * 休憩終了コメントを返すAPI
      *
      * @return 固定値
