@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.service.AttendService;
+import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 
+/**
+ * 出勤用コントローラのテスト
+ */
 @AutoConfigureMockMvc
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +41,16 @@ class AttendControllerTest {
 
     @MockBean
     private AttendService attendService;
+    @MockBean
+    private ClockProvider clockProvider;
 
+
+    /**
+     * 出勤時_名前時刻の正常系テスト
+     *
+     * @param query : エントリーポイント
+     * @param name  : nameの値
+     */
     @ParameterizedTest
     @CsvSource({
         "/?name=hoge, hoge", //
@@ -49,25 +62,29 @@ class AttendControllerTest {
         "/?name=%E3%81%82, %E3%81%82", //
     })
     void nameNormalTest(String query, String name) throws Exception {
+
         //serviceからGoodbye_Worldをcontrollerに入力した想定のテストをしたい(設定しないとnull)
         //mockが機能しているのか、実装の方が動いているのか判断するためにGoodbye_Worldを返させたい
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
+        when(clockProvider.now()).thenReturn("2020/04/24 18:24:37");
 
         //mockmvcからcontrollerにqueryを投げさせる
         this.mockMvc.perform(get(query))
-
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string(containsString(name)))
-            //Goodbye_Worldがcontrollerから出力されることを確認したい
-            .andExpect(content().string(containsString("Goodbye_World")));
+            //全文比較したい
+            .andExpect(content().string(
+                "Attend, starttime=2020/04/24 18:24:37, name=" + name
+                    + ", repository=Goodbye_World"));
 
         //controllerからserviceへの出力した際に、クエリの中身を引数として渡し、
         //parameterBridgeを1度通過するか検証
         verify(attendService, times(1)).parameterBridge(name);
     }
 
-    //異常系テスト
+    /**
+     * 出勤時異常系テスト
+     */
     @Test
     void nameErrorTest() throws Exception {
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
@@ -77,6 +94,9 @@ class AttendControllerTest {
         verify(attendService, never()).parameterBridge(any());
     }
 
+    /**
+     * ヘッダー_正常系テスト
+     */
     @Test
     void headerTest() throws Exception {
         this.mockMvc.perform(get("/header")
