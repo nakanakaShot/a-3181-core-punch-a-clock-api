@@ -21,6 +21,7 @@ public class AppProperties {
     @Getter
     public static class Slack {
 
+        private final String appSigningSecret;
         private final String appToken;
         private final String channelPostedToId;
     }

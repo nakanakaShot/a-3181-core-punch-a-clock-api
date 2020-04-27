@@ -4,6 +4,8 @@ server:
 app:
   # SlackAPIとの接続に関する設定
   slack:
+    # SlackApp で発行したSigningSecret
+    app-signing-secret: ${SLACK_APP_SIGNING_SECRET:}
     # SlackAPIで発行したtoken
     app-token: ${SLACK_APP_TOKEN:}
     # 投稿先チャンネルのID
