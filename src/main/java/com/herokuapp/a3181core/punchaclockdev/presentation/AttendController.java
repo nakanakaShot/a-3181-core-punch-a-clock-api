@@ -31,7 +31,7 @@ public class AttendController {
     public String attend(@RequestParam("name") String name) {
 
         return "Attend, starttime="
-            + clockProvider.now() + ", name=" + name + ", repository=" + attendService
+            + clockProvider.getFormatted() + ", name=" + name + ", repository=" + attendService
             .parameterBridge(name);
     }
 

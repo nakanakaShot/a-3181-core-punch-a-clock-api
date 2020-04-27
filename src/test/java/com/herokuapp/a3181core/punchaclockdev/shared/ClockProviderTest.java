@@ -30,15 +30,24 @@ class ClockProviderTest {
     @Test
     void timeZoneTest() {
         assertEquals(ZoneId.of("Asia/Tokyo"), clockProvider.getZone());
+    }
+
+    /**
+     * clockProviderのnow()が意図した時刻を返却するかのテスト
+     */
+    @Test
+    void nowTest() {
+        long expect = Instant.parse("2018-04-29T10:15:30.00Z").getEpochSecond();
+        assertEquals(expect, fixedClockProvider.now());
 
     }
 
     /**
-     * clockProviderのnow()がフォーマットされているかのテスト
+     * clockProviderの getFormatted()が 意図したフォーマットをされているかのテスト
      */
     @Test
     void timeFormatTest() {
-        assertEquals("2018/04/29 19:15:30", fixedClockProvider.now());
+        assertEquals("2018/04/29 19:15:30", fixedClockProvider.getFormatted());
 
     }
 }

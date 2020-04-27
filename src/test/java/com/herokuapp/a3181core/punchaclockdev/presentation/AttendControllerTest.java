@@ -66,7 +66,7 @@ class AttendControllerTest {
         //serviceからGoodbye_Worldをcontrollerに入力した想定のテストをしたい(設定しないとnull)
         //mockが機能しているのか、実装の方が動いているのか判断するためにGoodbye_Worldを返させたい
         when(attendService.parameterBridge(anyString())).thenReturn("Goodbye_World");
-        when(clockProvider.now()).thenReturn("2020/04/24 18:24:37");
+        when(clockProvider.getFormatted()).thenReturn("2020/04/24 18:24:37");
 
         //mockmvcからcontrollerにqueryを投げさせる
         this.mockMvc.perform(get(query))
