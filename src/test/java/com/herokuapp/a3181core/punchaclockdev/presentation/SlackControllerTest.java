@@ -20,7 +20,7 @@ class SlackControllerTest {
 
     /**
      * /slack/attendの正常系テスト
-     *
+     * <p>
      * parameterizedTest化したいときは、paramのvaluesを変数にするとよいです
      */
     @Test
@@ -92,6 +92,20 @@ class SlackControllerTest {
     @Test
     void dismissGetTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/slack/dismiss"))
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
+
+    @Test
+    void listPostTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/list"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("hello, world"));
+    }
+
+    @Test
+    void listGetTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/slack/list"))
             .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 }

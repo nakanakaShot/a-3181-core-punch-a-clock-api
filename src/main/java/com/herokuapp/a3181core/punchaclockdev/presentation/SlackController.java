@@ -19,7 +19,7 @@ public class SlackController {
      * 出勤コメントを返すAPI
      *
      * @param slackParam Slackコマンドから送られるリクエストパラメータ
-     * @param result bindの結果格納
+     * @param result     bindの結果格納
      * @return 固定値
      */
     @PostMapping(path = "/slack/attend")
@@ -58,9 +58,19 @@ public class SlackController {
     }
 
     /**
+     * listを返すAPI
+     *
+     * @return 固定値
+     */
+    @PostMapping(path = "/slack/list")
+    public String list() {
+        return "hello, world";
+    }
+
+    /**
      * リクエストパラメータのbind設定
      *
-     * @param binder リクエストに対するWebDataBinder
+     * @param binder  リクエストに対するWebDataBinder
      * @param request リクエスト時のServletオブジェクト
      */
     @InitBinder("slackParam")
