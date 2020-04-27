@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 public class SlackAuthenticator {
 
     private static final String SLACK_APP_SIGNING_VERSION = "v0";
+    private static final int MINUTE_AS_SECONDS = 60;
 
+    private final ClockProvider clockProvider;
     private final AppProperties props;
 
     /**
@@ -32,6 +34,10 @@ public class SlackAuthenticator {
         String slackRequestTimeStamp,
         String slackSignature) {
 
+        if (isPastForFiveMinutes(slackRequestTimeStamp)) {
+            return false;
+        }
+
         // Slack認証キーを生成する準備
         String baseString = String.join(":",
             SLACK_APP_SIGNING_VERSION,
@@ -43,6 +49,18 @@ public class SlackAuthenticator {
         byte[] digest = new HMacSha256Digest(baseString, secret).digest();
 
         return slackSignature.equals(generateChallengeToken(digest));
+    }
+
+    boolean isPastForFiveMinutes(String slackRequestTimeStamp) {
+        long timeStamp;
+        try {
+            timeStamp = Long.parseLong(slackRequestTimeStamp);
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException(ex);
+        }
+        long plusFiveMinutesFromTs = timeStamp + (5 * MINUTE_AS_SECONDS);
+
+        return clockProvider.now() > plusFiveMinutesFromTs;
     }
 
     /**
