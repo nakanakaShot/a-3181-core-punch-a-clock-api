@@ -1,11 +1,19 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import com.herokuapp.a3181core.punchaclockdev.shared.SlackAuthenticator;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -18,9 +26,20 @@ class SlackControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private SlackController controller;
+
+    @MockBean
+    private SlackAuthenticator slackAuthenticator;
+
+    @BeforeEach
+    void setUp() {
+        when(slackAuthenticator.isSignedRequestFromSlack(any(), any(), any())).thenReturn(true);
+    }
+
     /**
      * /slack/attendの正常系テスト
-     *
+     * <p>
      * parameterizedTest化したいときは、paramのvaluesを変数にするとよいです
      */
     @Test
@@ -93,5 +112,13 @@ class SlackControllerTest {
     void dismissGetTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/slack/dismiss"))
             .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
+
+    @Test
+    void errorIfUnsignedSlackRequest() {
+        when(slackAuthenticator.isSignedRequestFromSlack(any(), any(), any())).thenReturn(false);
+
+        Assertions.assertThrows(RuntimeException.class,
+            () -> controller.validateIfSignedRequestFromSlack(new MockHttpServletRequest()));
     }
 }
