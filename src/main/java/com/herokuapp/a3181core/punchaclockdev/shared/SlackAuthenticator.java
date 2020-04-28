@@ -40,10 +40,6 @@ public class SlackAuthenticator {
         String slackRequestTimeStamp = request.getHeader("X-Slack-Request-Timestamp");
         String slackSignature = request.getHeader("X-Slack-Signature");
 
-        if (isPastForFiveMinutes(slackRequestTimeStamp)) {
-            return false;
-        }
-
         // Slack認証キーを生成する準備
         String baseString = String.join(":",
             SLACK_APP_SIGNING_VERSION,
@@ -52,15 +48,17 @@ public class SlackAuthenticator {
 
         String secret = props.getSlack().getAppSigningSecret();
         if (StringUtils.isEmpty(secret)) {
-            log.error("Signing Secret is Undefined. Set it.");
+            log.error("Signing Secret is undefined.");
             throw new SlackAuthenticatorUnexpectedException();
         }
 
-        // 暗号化ダイジェストを作成
-        byte[] digest = new HMacSha256Digest(baseString, secret).digest();
+        if (isPastForFiveMinutes(slackRequestTimeStamp)) {
+            return false;
+        }
 
-        // 比較
-        return slackSignature.equals(generateChallengeToken(digest));
+        return isSignedRequest(baseString, secret, slackSignature);
+
+
     }
 
     boolean isPastForFiveMinutes(String slackRequestTimeStamp) {
@@ -73,6 +71,13 @@ public class SlackAuthenticator {
         long plusFiveMinutesFromTs = timeStamp + (5 * MINUTE_AS_SECONDS);
 
         return clockProvider.nowAsUnixTime() > plusFiveMinutesFromTs;
+    }
+
+    private boolean isSignedRequest(String baseString, String secret, String slackSignature) {
+        // 暗号化ダイジェストを作成
+        byte[] digest = new HMacSha256Digest(baseString, secret).digest();
+        // 比較
+        return slackSignature.equals(generateChallengeToken(digest));
     }
 
     /**

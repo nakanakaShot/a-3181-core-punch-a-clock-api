@@ -135,7 +135,7 @@ class SlackControllerTest {
 
     @ParameterizedTest
     @MethodSource("slackAuthenticatorExceptionProvider")
-    void errorFromSlackAuthenticator(Throwable clazz) throws Exception {
+    void errorFromSlackAuthenticator(Class<Throwable> clazz) throws Exception {
         when(slackAuthenticator.isSignedRequestFromSlack(any())).thenThrow(clazz);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/slack/attend"))
