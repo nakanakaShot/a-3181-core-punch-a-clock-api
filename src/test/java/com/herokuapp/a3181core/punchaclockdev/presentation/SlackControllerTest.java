@@ -118,6 +118,20 @@ class SlackControllerTest {
     }
 
     @Test
+    void listPostTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/list"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("hello, world"));
+    }
+
+    @Test
+    void listGetTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/slack/list"))
+            .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
+    }
+
+    @Test
     void errorIfUnsignedSlackRequest() throws Exception {
         when(slackAuthenticator.isSignedRequestFromSlack(any())).thenReturn(false);
 

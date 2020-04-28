@@ -81,6 +81,16 @@ public class SlackController {
     }
 
     /**
+     * listを返すAPI
+     *
+     * @return 固定値
+     */
+    @PostMapping(path = "/slack/list")
+    public String list() {
+        return "hello, world";
+    }
+
+    /**
      * リクエストパラメータのbind設定
      *
      * @param binder  リクエストに対するWebDataBinder
