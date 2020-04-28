@@ -74,11 +74,7 @@ public class SlackController {
     }
 
     void validateIfSignedRequestFromSlack(HttpServletRequest request) {
-        if (slackAuthenticator.isSignedRequestFromSlack(
-            request.getQueryString(),
-            request.getHeader("X-Slack-Request-Timestamp"),
-            request.getHeader("X-Slack-Signature")
-        )) {
+        if (slackAuthenticator.isSignedRequestFromSlack(request)) {
             return;
         }
         throw new SlackUnsignedRequestException();

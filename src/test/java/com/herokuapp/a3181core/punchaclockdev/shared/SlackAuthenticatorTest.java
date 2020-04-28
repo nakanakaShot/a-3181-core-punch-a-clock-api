@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +50,12 @@ class SlackAuthenticatorTest {
         String timeStamp = "1531420618";
         String expect = "v0=a2114d57b48eac39b9ad189dd8316235a7b4a8d21a10bd27519666489c69b503";
 
-        Assertions.assertTrue(target.isSignedRequestFromSlack(queryString, timeStamp, expect));
+        MockHttpServletRequest input = new MockHttpServletRequest();
+        input.setQueryString(queryString);
+        input.addHeader("X-Slack-Request-Timestamp", timeStamp);
+        input.addHeader("X-Slack-Signature", expect);
+
+        Assertions.assertTrue(target.isSignedRequestFromSlack(input));
     }
 
     @ParameterizedTest

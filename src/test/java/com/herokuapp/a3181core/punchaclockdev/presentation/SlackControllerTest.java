@@ -35,7 +35,7 @@ class SlackControllerTest {
 
     @BeforeEach
     void setUp() {
-        when(slackAuthenticator.isSignedRequestFromSlack(any(), any(), any())).thenReturn(true);
+        when(slackAuthenticator.isSignedRequestFromSlack(any())).thenReturn(true);
     }
 
     /**
@@ -117,7 +117,7 @@ class SlackControllerTest {
 
     @Test
     void errorIfUnsignedSlackRequest() {
-        when(slackAuthenticator.isSignedRequestFromSlack(any(), any(), any())).thenReturn(false);
+        when(slackAuthenticator.isSignedRequestFromSlack(any())).thenReturn(false);
 
         Assertions.assertThrows(SlackUnsignedRequestException.class,
             () -> controller.validateIfSignedRequestFromSlack(new MockHttpServletRequest()));

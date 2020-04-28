@@ -6,6 +6,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,15 +26,15 @@ public class SlackAuthenticator {
      * https://api.slack.com/authentication/verifying-requests-from-slack
      * </pre>
      *
-     * @param queryString           リクエストのクエリ文字列
-     * @param slackRequestTimeStamp Slackがリクエストしたときのタイムスタンプ
-     * @param slackSignature        Slackから受け取った署名(期待値)
+     * @param request 検証リクエスト
      * @return Slackからのリクエストの場合 true
      */
     public boolean isSignedRequestFromSlack(
-        String queryString,
-        String slackRequestTimeStamp,
-        String slackSignature) {
+        HttpServletRequest request) {
+
+        String queryString = request.getQueryString();
+        String slackRequestTimeStamp = request.getHeader("X-Slack-Request-Timestamp");
+        String slackSignature = request.getHeader("X-Slack-Signature");
 
         if (isPastForFiveMinutes(slackRequestTimeStamp)) {
             return false;
