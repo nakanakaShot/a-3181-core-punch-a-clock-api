@@ -5,6 +5,8 @@ import com.herokuapp.a3181core.punchaclockdev.exception.SlackAuthenticatorUnexpe
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +38,7 @@ public class SlackAuthenticator {
     public boolean isSignedRequestFromSlack(
         HttpServletRequest request) {
 
-        String queryString = request.getQueryString();
+        String queryString = getRawRequestBodyFromParameter(request);
         String slackRequestTimeStamp = request.getHeader("X-Slack-Request-Timestamp");
         String slackSignature = request.getHeader("X-Slack-Signature");
 
@@ -94,6 +96,13 @@ public class SlackAuthenticator {
             sb.append(String.format("%02x", b & 0xff));
         }
         return sb.toString();
+    }
+
+    private String getRawRequestBodyFromParameter(HttpServletRequest request) {
+        return request.getParameterMap().entrySet().stream()
+            .map(entry -> entry.getKey() + "=" + String
+                .join(",", Arrays.asList(entry.getValue())))
+            .collect(Collectors.joining("&"));
     }
 
     @RequiredArgsConstructor
