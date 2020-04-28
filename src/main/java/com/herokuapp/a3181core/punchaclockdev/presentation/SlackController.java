@@ -1,7 +1,9 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
+import com.herokuapp.a3181core.punchaclockdev.domain.service.SlackService;
 import javax.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -13,17 +15,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class SlackController {
+
+    private final SlackService slackService;
 
     /**
      * 出勤コメントを返すAPI
      *
      * @param slackParam Slackコマンドから送られるリクエストパラメータ
-     * @param result bindの結果格納
+     * @param result     bindの結果格納
      * @return 固定値
      */
     @PostMapping(path = "/slack/attend")
     public String attend(@Validated SlackParam slackParam, BindingResult result) {
+        slackService.postParamBridge(slackParam);
+
         return "出勤！おはようございます\uD83C\uDF1E";
     }
 
@@ -60,7 +67,7 @@ public class SlackController {
     /**
      * リクエストパラメータのbind設定
      *
-     * @param binder リクエストに対するWebDataBinder
+     * @param binder  リクエストに対するWebDataBinder
      * @param request リクエスト時のServletオブジェクト
      */
     @InitBinder("slackParam")
