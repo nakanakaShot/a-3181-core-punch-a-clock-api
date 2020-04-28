@@ -1,7 +1,10 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackAuthenticatorUnexpectedException;
 import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
+import com.herokuapp.a3181core.punchaclockdev.shared.ErrorMessageDef;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,8 +20,25 @@ public class SlackExceptionHandler {
      */
 
     @ExceptionHandler({SlackUnsignedRequestException.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleException(SlackUnsignedRequestException ex) {
-        return "失敗！";
+    public ResponseEntity<String> handleException(SlackUnsignedRequestException ex) {
+        return new ResponseEntity<>(
+            ErrorMessageDef.FAILED_TO_POST.getMessage(),
+            ErrorMessageDef.FAILED_TO_POST.getStatus());
     }
+
+    /**
+     * Slack認証予期せぬ例外
+     *
+     * @param ex 例外
+     * @return エラーレスポンス
+     */
+
+    @ExceptionHandler({SlackAuthenticatorUnexpectedException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<String> handleException(SlackAuthenticatorUnexpectedException ex) {
+        return new ResponseEntity<>(
+            ErrorMessageDef.FAILED_TO_ACCESS.getMessage(),
+            ErrorMessageDef.FAILED_TO_ACCESS.getStatus());
+    }
+
 }

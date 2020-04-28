@@ -3,18 +3,20 @@ package com.herokuapp.a3181core.punchaclockdev.presentation;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackAuthenticatorUnexpectedException;
 import com.herokuapp.a3181core.punchaclockdev.shared.SlackAuthenticator;
-import org.junit.jupiter.api.Assertions;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -116,10 +118,29 @@ class SlackControllerTest {
     }
 
     @Test
-    void errorIfUnsignedSlackRequest() {
+    void errorIfUnsignedSlackRequest() throws Exception {
         when(slackAuthenticator.isSignedRequestFromSlack(any())).thenReturn(false);
 
-        Assertions.assertThrows(SlackUnsignedRequestException.class,
-            () -> controller.validateIfSignedRequestFromSlack(new MockHttpServletRequest()));
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/attend"))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("投稿に失敗しました。"));
+    }
+
+    private static Stream<Arguments> slackAuthenticatorExceptionProvider() {
+        return Stream.of(
+            Arguments.of(SlackAuthenticatorUnexpectedException.class)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("slackAuthenticatorExceptionProvider")
+    void errorFromSlackAuthenticator(Throwable clazz) throws Exception {
+        when(slackAuthenticator.isSignedRequestFromSlack(any())).thenThrow(clazz);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/attend"))
+            .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+            .andExpect(MockMvcResultMatchers.content()
+                .string("サーバーにアクセスできませんでした。"));
     }
 }

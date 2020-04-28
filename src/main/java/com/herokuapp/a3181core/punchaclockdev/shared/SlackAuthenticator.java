@@ -1,6 +1,7 @@
 package com.herokuapp.a3181core.punchaclockdev.shared;
 
 import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackAuthenticatorUnexpectedException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -8,8 +9,11 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SlackAuthenticator {
@@ -45,7 +49,12 @@ public class SlackAuthenticator {
             SLACK_APP_SIGNING_VERSION,
             slackRequestTimeStamp,
             queryString);
+
         String secret = props.getSlack().getAppSigningSecret();
+        if (StringUtils.isEmpty(secret)) {
+            log.error("Signing Secret is Undefined. Set it.");
+            throw new SlackAuthenticatorUnexpectedException();
+        }
 
         // 暗号化ダイジェストを作成
         byte[] digest = new HMacSha256Digest(baseString, secret).digest();
@@ -103,7 +112,7 @@ public class SlackAuthenticator {
                 return mac.doFinal(baseString.getBytes(StandardCharsets.UTF_8));
 
             } catch (InvalidKeyException | NoSuchAlgorithmException ex) {
-                throw new RuntimeException(ex);
+                throw new SlackAuthenticatorUnexpectedException(ex);
             }
         }
     }

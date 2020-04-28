@@ -73,7 +73,7 @@ public class SlackController {
         return "退勤！お疲れさまでした \uD83D\uDECF";
     }
 
-    void validateIfSignedRequestFromSlack(HttpServletRequest request) {
+    private void validateIfSignedRequestFromSlack(HttpServletRequest request) {
         if (slackAuthenticator.isSignedRequestFromSlack(request)) {
             return;
         }
