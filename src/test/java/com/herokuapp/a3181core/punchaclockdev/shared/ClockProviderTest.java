@@ -38,7 +38,7 @@ class ClockProviderTest {
     @Test
     void nowTest() {
         long expect = Instant.parse("2018-04-29T10:15:30.00Z").getEpochSecond();
-        assertEquals(expect, fixedClockProvider.now());
+        assertEquals(expect, fixedClockProvider.nowAsUnixTime());
 
     }
 
@@ -47,7 +47,7 @@ class ClockProviderTest {
      */
     @Test
     void timeFormatTest() {
-        assertEquals("2018/04/29 19:15:30", fixedClockProvider.getFormatted());
+        assertEquals("2018/04/29 19:15:30", fixedClockProvider.nowAsFormatted());
 
     }
 }

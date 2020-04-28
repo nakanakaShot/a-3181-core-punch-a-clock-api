@@ -63,7 +63,7 @@ public class SlackAuthenticator {
         }
         long plusFiveMinutesFromTs = timeStamp + (5 * MINUTE_AS_SECONDS);
 
-        return clockProvider.now() > plusFiveMinutesFromTs;
+        return clockProvider.nowAsUnixTime() > plusFiveMinutesFromTs;
     }
 
     /**

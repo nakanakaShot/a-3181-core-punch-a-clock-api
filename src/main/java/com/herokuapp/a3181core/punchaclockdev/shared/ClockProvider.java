@@ -24,7 +24,7 @@ public class ClockProvider {
      *
      * @return 現在時刻
      */
-    public long now() {
+    public long nowAsUnixTime() {
         return clock.instant().getEpochSecond();
     }
 
@@ -33,7 +33,7 @@ public class ClockProvider {
      *
      * @return フォーマットをかけた現在時刻
      */
-    public String getFormatted() {
+    public String nowAsFormatted() {
         return LocalDateTime.now(clock).format(TIME_FORMAT);
     }
 
