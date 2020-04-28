@@ -1,6 +1,7 @@
 package com.herokuapp.a3181core.punchaclockdev.shared;
 
 import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
@@ -48,6 +49,7 @@ public class SlackAuthenticator {
         // 暗号化ダイジェストを作成
         byte[] digest = new HMacSha256Digest(baseString, secret).digest();
 
+        // 比較
         return slackSignature.equals(generateChallengeToken(digest));
     }
 
@@ -56,7 +58,7 @@ public class SlackAuthenticator {
         try {
             timeStamp = Long.parseLong(slackRequestTimeStamp);
         } catch (NumberFormatException ex) {
-            throw new RuntimeException(ex);
+            return true;
         }
         long plusFiveMinutesFromTs = timeStamp + (5 * MINUTE_AS_SECONDS);
 
@@ -95,8 +97,9 @@ public class SlackAuthenticator {
         byte[] digest() {
             try {
                 Mac mac = Mac.getInstance(SIGNING_CRYPT_ALGORITHM);
-                mac.init(new SecretKeySpec(secret.getBytes(), SIGNING_CRYPT_ALGORITHM));
-                return mac.doFinal(baseString.getBytes());
+                mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+                    SIGNING_CRYPT_ALGORITHM));
+                return mac.doFinal(baseString.getBytes(StandardCharsets.UTF_8));
 
             } catch (InvalidKeyException | NoSuchAlgorithmException ex) {
                 throw new RuntimeException(ex);
