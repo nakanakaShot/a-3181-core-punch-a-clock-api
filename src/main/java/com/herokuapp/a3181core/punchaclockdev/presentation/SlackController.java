@@ -1,6 +1,7 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
 import com.herokuapp.a3181core.punchaclockdev.shared.SlackAuthenticator;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +81,7 @@ public class SlackController {
         )) {
             return;
         }
-        throw new RuntimeException();
+        throw new SlackUnsignedRequestException();
     }
 
     /**

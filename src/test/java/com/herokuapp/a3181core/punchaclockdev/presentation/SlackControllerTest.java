@@ -3,6 +3,7 @@ package com.herokuapp.a3181core.punchaclockdev.presentation;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
 import com.herokuapp.a3181core.punchaclockdev.shared.SlackAuthenticator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,7 +119,7 @@ class SlackControllerTest {
     void errorIfUnsignedSlackRequest() {
         when(slackAuthenticator.isSignedRequestFromSlack(any(), any(), any())).thenReturn(false);
 
-        Assertions.assertThrows(RuntimeException.class,
+        Assertions.assertThrows(SlackUnsignedRequestException.class,
             () -> controller.validateIfSignedRequestFromSlack(new MockHttpServletRequest()));
     }
 }
