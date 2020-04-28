@@ -2,10 +2,13 @@ package com.herokuapp.a3181core.punchaclockdev.shared;
 
 import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
 import com.herokuapp.a3181core.punchaclockdev.exception.SlackAuthenticatorUnexpectedException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -98,11 +101,21 @@ public class SlackAuthenticator {
         return sb.toString();
     }
 
-    private String getRawRequestBodyFromParameter(HttpServletRequest request) {
+    String getRawRequestBodyFromParameter(HttpServletRequest request) {
         return request.getParameterMap().entrySet().stream()
             .map(entry -> entry.getKey() + "=" + String
-                .join(",", Arrays.asList(entry.getValue())))
+                .join(",", urlEncode(entry.getValue())))
             .collect(Collectors.joining("&"));
+    }
+
+    private List<String> urlEncode(String[] target) {
+        return Arrays.stream(target).map(str -> {
+            try {
+                return URLEncoder.encode(str, "UTF-8");
+            } catch (UnsupportedEncodingException ex) {
+                throw new SlackAuthenticatorUnexpectedException(ex);
+            }
+        }).collect(Collectors.toList());
     }
 
     @RequiredArgsConstructor
@@ -121,7 +134,8 @@ public class SlackAuthenticator {
         byte[] digest() {
             try {
                 Mac mac = Mac.getInstance(SIGNING_CRYPT_ALGORITHM);
-                mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+                mac.init(new SecretKeySpec(
+                    secret.getBytes(StandardCharsets.UTF_8),
                     SIGNING_CRYPT_ALGORITHM));
                 return mac.doFinal(baseString.getBytes(StandardCharsets.UTF_8));
 
