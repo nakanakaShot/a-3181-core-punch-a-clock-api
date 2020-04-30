@@ -42,7 +42,8 @@ public class SlackRepository {
         requestParam.add("token", appProperties.getSlack().getAppToken());
         requestParam.add("channel", appProperties.getSlack().getChannelPostedToId());
         requestParam
-            .add("text", "現在時刻 " + clockProvider.now() + " 名前 " + slackParam.getUserName());
+            .add("text",
+                "現在時刻 " + clockProvider.nowAsFormatted() + " 名前 " + slackParam.getUserName());
         restTemplate
             .postForObject("https://slack.com/api/chat.postMessage", requestParam, String.class);
 

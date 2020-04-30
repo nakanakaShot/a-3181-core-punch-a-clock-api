@@ -20,11 +20,20 @@ public class ClockProvider {
     private final Clock clock;
 
     /**
+     * 現在時刻を取得
+     *
+     * @return 現在時刻
+     */
+    public long nowAsUnixTime() {
+        return clock.instant().getEpochSecond();
+    }
+
+    /**
      * 現在時刻をString型にフォーマット
      *
      * @return フォーマットをかけた現在時刻
      */
-    public String now() {
+    public String nowAsFormatted() {
         return LocalDateTime.now(clock).format(TIME_FORMAT);
     }
 

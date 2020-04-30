@@ -2,6 +2,8 @@ package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
 import com.herokuapp.a3181core.punchaclockdev.domain.service.SlackService;
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
+import com.herokuapp.a3181core.punchaclockdev.shared.SlackAuthenticator;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.MutablePropertyValues;
@@ -20,48 +22,75 @@ public class SlackController {
 
     private final SlackService slackService;
 
+    private final SlackAuthenticator slackAuthenticator;
+
     /**
      * 出勤コメントを返すAPI
      *
      * @param slackParam Slackコマンドから送られるリクエストパラメータ
      * @param result     bindの結果格納
+     * @param request    リクエスト
      * @return 固定値
      */
     @PostMapping(path = "/slack/attend")
-    public String attend(@Validated SlackParam slackParam, BindingResult result) {
+    public String attend(@Validated SlackParam slackParam, BindingResult result,
+        HttpServletRequest request) {
+        validateIfSignedRequestFromSlack(request);
         slackService.postParamBridge(slackParam);
-
         return "出勤！おはようございます\uD83C\uDF1E";
     }
 
     /**
      * 休憩開始コメントを返すAPI
      *
+     * @param request リクエスト
      * @return 固定値
      */
     @RequestMapping(path = "/slack/break", method = RequestMethod.POST)
-    public String breaked() {
+    public String breaked(HttpServletRequest request) {
+        validateIfSignedRequestFromSlack(request);
         return "休憩開始！リラックスしましょう\uD83D\uDE0A";
     }
 
     /**
      * 休憩終了コメントを返すAPI
      *
+     * @param request リクエスト
      * @return 固定値
      */
     @RequestMapping(path = "/slack/return", method = RequestMethod.POST)
-    public String returned() {
+    public String returned(HttpServletRequest request) {
+        validateIfSignedRequestFromSlack(request);
         return "休憩終了！適度に頑張りましょう\uD83C\uDFC3\u200D♂️";
     }
 
     /**
      * 退勤コメントを返すAPI
      *
+     * @param request リクエスト
      * @return 固定値
      */
     @PostMapping(path = "/slack/dismiss")
-    public String dismiss() {
+    public String dismiss(HttpServletRequest request) {
+        validateIfSignedRequestFromSlack(request);
         return "退勤！お疲れさまでした \uD83D\uDECF";
+    }
+
+    private void validateIfSignedRequestFromSlack(HttpServletRequest request) {
+        if (slackAuthenticator.isSignedRequestFromSlack(request)) {
+            return;
+        }
+        throw new SlackUnsignedRequestException();
+    }
+
+    /**
+     * listを返すAPI
+     *
+     * @return 固定値
+     */
+    @PostMapping(path = "/slack/list")
+    public String list() {
+        return "hello, world";
     }
 
     /**
