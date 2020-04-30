@@ -3,34 +3,20 @@ package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+
 @Repository
+@RequiredArgsConstructor
 public class SlackRepository {
 
     private final RestTemplate restTemplate;
     private final AppProperties appProperties;
     private final ClockProvider clockProvider;
-
-    /**
-     * restTemplateのみrestTemplateBuilder.build()を代入しているので、自動生成されるコンストラクタでは対応できない為、記述している。
-     * restTemplate, appProperties, clockProviderのコンストラクタインジェクション
-     *
-     * @param restTemplateBuilder :restTemplate(データ送信)を使う為に必要
-     * @param appProperties       :IntelliJ上に保存した環境変数
-     * @param clockProvider       :同一の現在時刻
-     */
-    public SlackRepository(RestTemplateBuilder restTemplateBuilder, AppProperties appProperties,
-        ClockProvider clockProvider) {
-        // RestTemplateインスタンスを生成する
-        this.restTemplate = restTemplateBuilder.build();
-        this.appProperties = appProperties;
-        this.clockProvider = clockProvider;
-    }
 
     /**
      * requestParamにデータを詰め込んでSlackAPIにpost
