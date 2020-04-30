@@ -89,9 +89,29 @@ class SlackControllerTest {
             .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 
+    /**
+     * /slack/returnの正常系テスト
+     * <p>
+     * parameterizedTest化したいときは、paramのvaluesを変数にするとよいです
+     */
     @Test
     void returnPostTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/slack/return"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/return")
+            .param("token", "gIkuvaNzQIHg97ATvDxqgjtO")
+            .param("team_id", "T0001")
+            .param("team_domain", "example")
+            .param("enterprise_id", "E0001")
+            .param("enterprise_name", "Globular%20Construct%20Inc")
+            .param("channel_id", "C2147483705")
+            .param("channel_name", "test")
+            .param("user_id", "U2147483697")
+            .param("user_name", "Steve")
+            .param("command", "%2Fweather")
+            .param("text", "94070")
+            .param("response_url", "https%3A%2F%2Fhooks.slack.com%2Fcommands%2F1234%2F5678")
+            .param("trigger_id", "13345224609.738474920 .8088930838d 88f 008e0")
+
+        )
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content()
                 .string("休憩終了！適度に頑張りましょう\uD83C\uDFC3\u200D♂️"));

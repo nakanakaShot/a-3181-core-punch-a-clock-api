@@ -40,11 +40,14 @@ public class SlackController {
     /**
      * 休憩開始コメントを返すAPI
      *
-     * @param request リクエスト
+     * @param slackParam Slackコマンドから送られるリクエストパラメータ
+     * @param result     bindの結果格納
+     * @param request    リクエスト
      * @return 固定値
      */
     @RequestMapping(path = "/slack/break", method = RequestMethod.POST)
-    public String breaked(HttpServletRequest request) {
+    public String breaked(@Validated SlackParam slackParam, BindingResult result,
+        HttpServletRequest request) {
         validateIfSignedRequestFromSlack(request);
         return "休憩開始！リラックスしましょう\uD83D\uDE0A";
     }
