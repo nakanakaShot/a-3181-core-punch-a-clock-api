@@ -103,9 +103,28 @@ class SlackControllerTest {
             .andExpect(MockMvcResultMatchers.status().isMethodNotAllowed());
     }
 
+    /**
+     * /slack/dismissの正常系テスト
+     * <p>
+     * parameterizedTest化したいときは、paramのvaluesを変数にするとよいです
+     */
     @Test
     void dismissPostTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/slack/dismiss"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/slack/dismiss")
+            .param("token", "gIkuvaNzQIHg97ATvDxqgjtO")
+            .param("team_id", "T0001")
+            .param("team_domain", "example")
+            .param("enterprise_id", "E0001")
+            .param("enterprise_name", "Globular%20Construct%20Inc")
+            .param("channel_id", "C2147483705")
+            .param("channel_name", "test")
+            .param("user_id", "U2147483697")
+            .param("user_name", "Steve")
+            .param("command", "%2Fweather")
+            .param("text", "94070")
+            .param("response_url", "https%3A%2F%2Fhooks.slack.com%2Fcommands%2F1234%2F5678")
+            .param("trigger_id", "13345224609.738474920 .8088930838d 88f 008e0")
+        )
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content()
                 .string("退勤！お疲れさまでした \uD83D\uDECF"));
