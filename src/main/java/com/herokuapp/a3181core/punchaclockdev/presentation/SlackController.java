@@ -67,11 +67,14 @@ public class SlackController {
     /**
      * 退勤コメントを返すAPI
      *
-     * @param request リクエスト
+     * @param slackParam Slackコマンドから送られるリクエストパラメータ
+     * @param result     bindの結果格納
+     * @param request    リクエスト
      * @return 固定値
      */
     @PostMapping(path = "/slack/dismiss")
-    public String dismiss(HttpServletRequest request) {
+    public String dismiss(@Validated SlackParam slackParam, BindingResult result,
+        HttpServletRequest request) {
         validateIfSignedRequestFromSlack(request);
         return "退勤！お疲れさまでした \uD83D\uDECF";
     }
