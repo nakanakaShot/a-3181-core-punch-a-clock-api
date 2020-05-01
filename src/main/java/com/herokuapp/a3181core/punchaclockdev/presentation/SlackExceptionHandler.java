@@ -1,5 +1,6 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackApiPostUnexpectedException;
 import com.herokuapp.a3181core.punchaclockdev.exception.SlackAuthenticatorUnexpectedException;
 import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
 import com.herokuapp.a3181core.punchaclockdev.shared.ErrorMessageDef;
@@ -41,4 +42,17 @@ public class SlackExceptionHandler {
             ErrorMessageDef.FAILED_TO_ACCESS.getStatus());
     }
 
+    /**
+     * SlackAPIへのPOST時の予期せぬ例外
+     *
+     * @param ex 例外
+     * @return エラーレスポンス
+     */
+    @ExceptionHandler({SlackApiPostUnexpectedException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<String> handleException(SlackApiPostUnexpectedException ex) {
+        return new ResponseEntity<>(
+            ErrorMessageDef.FAILED_TO_SLACK_API_POST.getMessage(),
+            ErrorMessageDef.FAILED_TO_SLACK_API_POST.getStatus());
+    }
 }

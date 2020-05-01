@@ -8,6 +8,7 @@ import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
 import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties.Slack;
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,15 +20,15 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootTest
 class SlackRepositoryTest {
 
+    @Autowired
+    private SlackRepository slackRepository;
+
     @MockBean
     private RestTemplate restTemplate;
     @MockBean
     private AppProperties appProperties;
     @MockBean
     private ClockProvider clockProvider;
-
-    @Autowired
-    private SlackRepository slackRepository;
 
     //taken,channelに値が入っているかのテスト
     @Test
@@ -51,7 +52,7 @@ class SlackRepositoryTest {
 
         verify(restTemplate, times(1))
             .postForObject("https://slack.com/api/chat.postMessage",
-                requestParam, String.class);
+                requestParam, HttpServletResponse.class);
     }
 
 }
