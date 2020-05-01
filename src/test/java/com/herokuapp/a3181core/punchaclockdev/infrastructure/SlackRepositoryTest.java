@@ -27,7 +27,7 @@ class SlackRepositoryTest {
     private ClockProvider clockProvider;
 
     @Autowired
-    SlackRepository slackRepository;
+    private SlackRepository slackRepository;
 
     //taken,channelに値が入っているかのテスト
     @Test
