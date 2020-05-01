@@ -1,6 +1,7 @@
 package com.herokuapp.a3181core.punchaclockdev.presentation;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
+import com.herokuapp.a3181core.punchaclockdev.domain.service.SlackService;
 import com.herokuapp.a3181core.punchaclockdev.exception.SlackUnsignedRequestException;
 import com.herokuapp.a3181core.punchaclockdev.shared.SlackAuthenticator;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class SlackController {
 
+    private final SlackService slackService;
+
     private final SlackAuthenticator slackAuthenticator;
 
     /**
@@ -33,7 +36,7 @@ public class SlackController {
     public String attend(@Validated SlackParam slackParam, BindingResult result,
         HttpServletRequest request) {
         validateIfSignedRequestFromSlack(request);
-
+        slackService.postParamBridge(slackParam);
         return "出勤！おはようございます\uD83C\uDF1E";
     }
 
