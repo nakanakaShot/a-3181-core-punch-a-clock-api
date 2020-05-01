@@ -52,11 +52,14 @@ public class SlackController {
     /**
      * 休憩終了コメントを返すAPI
      *
-     * @param request リクエスト
+     * @param slackParam Slackコマンドから送られるリクエストパラメータ
+     * @param result     bindの結果格納
+     * @param request    リクエスト
      * @return 固定値
      */
     @RequestMapping(path = "/slack/return", method = RequestMethod.POST)
-    public String returned(HttpServletRequest request) {
+    public String returned(@Validated SlackParam slackParam, BindingResult result,
+        HttpServletRequest request) {
         validateIfSignedRequestFromSlack(request);
         return "休憩終了！適度に頑張りましょう\uD83C\uDFC3\u200D♂️";
     }
