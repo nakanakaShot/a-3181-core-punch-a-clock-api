@@ -1,12 +1,15 @@
 package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
+import com.herokuapp.a3181core.punchaclockdev.exception.SlackApiPostUnexpectedException;
 import com.herokuapp.a3181core.punchaclockdev.infrastructure.SlackDto.Message;
 import com.herokuapp.a3181core.punchaclockdev.infrastructure.SlackDto.Message.Attachment;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
@@ -18,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.LinkedMultiValueMap;
@@ -125,5 +129,20 @@ class SlackRepositoryTest {
         assertEquals(expected, actual);
 
         mockServer.verify();
+    }
+
+
+    @Test
+    void test4xx() {
+        MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
+
+        mockServer.expect(requestTo("https://slack.com/api/chat.postMessage"))
+            .andRespond(withStatus(HttpStatus.UNAUTHORIZED));
+
+        SlackParam param = new SlackParam();
+        param.setUserName("Tarou");
+
+        assertThrows(SlackApiPostUnexpectedException.class,
+            () -> slackRepository.postParam(param));
     }
 }
