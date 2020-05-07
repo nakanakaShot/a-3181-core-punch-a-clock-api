@@ -1,8 +1,13 @@
 package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.List;
+import lombok.Data;
 
+@Data
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class SlackDto {
 
     //SlackAPIからのJsonのレスポンスを受け取る処理
@@ -11,56 +16,29 @@ public class SlackDto {
     private Boolean ok;
     private String channel;
     private String ts;
-
-    @Override
-    public String toString() {
-        return "ok: " + ok +
-            ", channel: " + channel +
-            ", ts: " + ts;
-    }
-
     private Message message;
 
+    @Data
+    @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class Message {
 
         private String text;
         private String username;
-        private String bot_id;
+        private String botId;
         private List<Attachment> attachments;
 
         private String type;
         private String subtype;
         private String ts;
 
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() +
-                ": text: " + text +
-                ": username: " + username +
-                ": bot_id: " + bot_id +
-                ": attachments: " + attachments +
-                ": type: " + type +
-                ": subtype: " + subtype +
-                ": ts: " + ts;
+        @Data
+        @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+        public static class Attachment {
+
+            private String text;
+            private Integer id;
+            private String fallback;
+
         }
     }
-
-    public static class Attachment {
-
-        private String text;
-        private Integer id;
-        private String fallback;
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() +
-                ": text: " + text +
-                ", id: " + id +
-                ", fallback: " + fallback;
-        }
-    }
-
-//    ObjectMapper mapper = new ObjectMapper();
-//    SlackDTO dto = mapper.readValue(json, SlackDTO.class);
-
 }
