@@ -2,6 +2,7 @@ package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -14,10 +15,12 @@ import com.herokuapp.a3181core.punchaclockdev.infrastructure.SlackDto.Message;
 import com.herokuapp.a3181core.punchaclockdev.infrastructure.SlackDto.Message.Attachment;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
 import java.util.Collections;
+import java.util.stream.Stream;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,5 +150,15 @@ class SlackRepositoryTest {
 
         assertThrows(SlackApiPostUnexpectedException.class,
             () -> slackRepository.postParam(param));
+    }
+
+    static Stream<Arguments> testErrorProvider() {
+        return Stream.of(
+            arguments(HttpStatus.NOT_FOUND),
+            arguments(HttpStatus.REQUEST_TIMEOUT),
+            arguments(HttpStatus.BAD_REQUEST),
+            arguments(HttpStatus.INTERNAL_SERVER_ERROR),
+            arguments(HttpStatus.GATEWAY_TIMEOUT)
+        );
     }
 }
