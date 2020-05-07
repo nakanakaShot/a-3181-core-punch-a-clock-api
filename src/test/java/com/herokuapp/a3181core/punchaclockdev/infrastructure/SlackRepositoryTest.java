@@ -2,16 +2,15 @@ package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties;
-import com.herokuapp.a3181core.punchaclockdev.configure.AppProperties.Slack;
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
 import javax.servlet.http.HttpServletResponse;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class SlackRepositoryTest {
 
     @Autowired
@@ -31,8 +31,8 @@ class SlackRepositoryTest {
     @Autowired
     private RestTemplate restTemplate;
 
-    @MockBean
-    private AppProperties appProperties;
+    //    @MockBean
+//    private AppProperties appProperties;
     @MockBean
     private ClockProvider clockProvider;
 
@@ -44,9 +44,9 @@ class SlackRepositoryTest {
         param.setUserName("Tarou");
 
         //テスト中に返す値 これがないと全てnullになる
-        Slack slack = new Slack("aaa", "AAA", "BBB");
-        when(appProperties.getSlack()).thenReturn(slack);
-        when(clockProvider.nowAsFormatted()).thenReturn("CCC");
+//        Slack slack = new Slack("aaa", "AAA", "BBB");
+//        when(appProperties.getSlack()).thenReturn(slack);
+//        when(clockProvider.nowAsFormatted()).thenReturn("CCC");
 
         //期待値
         MultiValueMap<String, String> requestParam = new LinkedMultiValueMap<>();
