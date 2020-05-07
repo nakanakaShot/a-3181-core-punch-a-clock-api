@@ -17,6 +17,8 @@ import java.util.Collections;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -132,12 +134,13 @@ class SlackRepositoryTest {
     }
 
 
-    @Test
-    void test4xx() {
+    @MethodSource("testErrorProvider")
+    @ParameterizedTest
+    void testError(HttpStatus status) {
         MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
 
         mockServer.expect(requestTo("https://slack.com/api/chat.postMessage"))
-            .andRespond(withStatus(HttpStatus.UNAUTHORIZED));
+            .andRespond(withStatus(status));
 
         SlackParam param = new SlackParam();
         param.setUserName("Tarou");
