@@ -96,9 +96,11 @@ class SlackRepositoryTest {
         mockServer.expect(requestTo("https://slack.com/api/chat.postMessage"))
             .andRespond(withSuccess(returnJson, MediaType.APPLICATION_JSON));
 
+        //入力値
         SlackParam param = new SlackParam();
         param.setUserName("Tarou");
 
+        //期待値
         Attachment attachment = new Attachment();
         attachment.setText("This is an attachment");
         attachment.setId(1);
