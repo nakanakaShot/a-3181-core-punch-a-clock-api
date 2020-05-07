@@ -18,9 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -72,6 +70,12 @@ class SlackRepositoryTest {
 
         MockRestServiceServer mockServer = MockRestServiceServer.bindTo(restTemplate).build();
 
+        // Service -> Repositoryの入力値
+        SlackParam param = new SlackParam();
+        param.setUserName("Tarou");
+
+        // repository -> mockserver の期待値＆
+        // mockserver -> repository の入力値
         String returnJson = "{\n"
             + "    \"ok\": true,\n"
             + "    \"channel\": \"C1H9RESGL\",\n"
@@ -92,15 +96,10 @@ class SlackRepositoryTest {
             + "        \"ts\": \"1503435956.000247\"\n"
             + "    }\n"
             + "}";
-
         mockServer.expect(requestTo("https://slack.com/api/chat.postMessage"))
             .andRespond(withSuccess(returnJson, MediaType.APPLICATION_JSON));
 
-        //入力値
-        SlackParam param = new SlackParam();
-        param.setUserName("Tarou");
-
-        //期待値
+        //repository -> serviceの期待値
         Attachment attachment = new Attachment();
         attachment.setText("This is an attachment");
         attachment.setId(1);
@@ -115,21 +114,16 @@ class SlackRepositoryTest {
         message.setSubtype("bot_message");
         message.setTs("1503435956.000247");
 
-        SlackDto slackDto = new SlackDto();
-        slackDto.setOk(true);
-        slackDto.setChannel("C1H9RESGL");
-        slackDto.setTs("1503435956.000247");
-        slackDto.setMessage(message);
+        SlackDto expected = new SlackDto();
+        expected.setOk(true);
+        expected.setChannel("C1H9RESGL");
+        expected.setTs("1503435956.000247");
+        expected.setMessage(message);
 
-        MultiValueMap<String, String> mvm = new LinkedMultiValueMap<>();
-        mvm.add("Content-Type", "application/json");
-
-        ResponseEntity<SlackDto> expected = new ResponseEntity<>(slackDto, mvm, HttpStatus.OK);
-        ResponseEntity<SlackDto> actual = slackRepository.postParam(param);
+        SlackDto actual = slackRepository.postParam(param).getBody();
 
         assertEquals(expected, actual);
 
         mockServer.verify();
-
     }
 }
