@@ -1,6 +1,5 @@
 package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.List;
@@ -11,8 +10,6 @@ import lombok.Data;
 public class SlackDto {
 
     //SlackAPIからのJsonのレスポンスを受け取る処理
-    @JsonProperty("slackAPI")
-
     private Boolean ok;
     private String channel;
     private String ts;

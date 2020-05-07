@@ -1,12 +1,16 @@
 package com.herokuapp.a3181core.punchaclockdev.infrastructure;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 import com.herokuapp.a3181core.punchaclockdev.domain.model.SlackParam;
+import com.herokuapp.a3181core.punchaclockdev.infrastructure.SlackDto.Message;
+import com.herokuapp.a3181core.punchaclockdev.infrastructure.SlackDto.Message.Attachment;
 import com.herokuapp.a3181core.punchaclockdev.shared.ClockProvider;
+import java.util.Collections;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -94,9 +99,34 @@ class SlackRepositoryTest {
         SlackParam param = new SlackParam();
         param.setUserName("Tarou");
 
-        ResponseEntity<SlackDto> slackDto = slackRepository.postParam(param);
+        Attachment attachment = new Attachment();
+        attachment.setText("This is an attachment");
+        attachment.setId(1);
+        attachment.setFallback("This is an attachment's fallback");
 
-        System.out.println(slackDto);
+        Message message = new Message();
+        message.setText("Here's a message for you");
+        message.setUsername("ecto1");
+        message.setBotId("B19LU7CSY");
+        message.setAttachments(Collections.singletonList(attachment));
+        message.setType("message");
+        message.setSubtype("bot_message");
+        message.setTs("1503435956.000247");
+
+        SlackDto slackDto = new SlackDto();
+        slackDto.setOk(true);
+        slackDto.setChannel("C1H9RESGL");
+        slackDto.setTs("1503435956.000247");
+        slackDto.setMessage(message);
+
+        MultiValueMap<String, String> mvm = new LinkedMultiValueMap<>();
+        mvm.add("Content-Type", "application/json");
+
+        ResponseEntity<SlackDto> expected = new ResponseEntity<>(slackDto, mvm, HttpStatus.OK);
+        ResponseEntity<SlackDto> actual = slackRepository.postParam(param);
+
+        assertEquals(expected, actual);
+
         mockServer.verify();
 
     }
