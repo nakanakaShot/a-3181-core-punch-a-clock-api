@@ -27,7 +27,7 @@ public class SlackRepository {
      *
      * @param slackParam : tokenやteamIdなど。詳細はslackParam.javaを参照
      */
-    public ResponseEntity<String> postParam(SlackParam slackParam) {
+    public ResponseEntity<SlackDto> postParam(SlackParam slackParam) {
         MultiValueMap<String, String> requestParam = new LinkedMultiValueMap<>();
         requestParam.add("token", appProperties.getSlack().getAppToken());
         requestParam.add("channel", appProperties.getSlack().getChannelPostedToId());
@@ -37,7 +37,7 @@ public class SlackRepository {
         try {
             return restTemplate
                 .postForEntity("https://slack.com/api/chat.postMessage", requestParam,
-                    String.class);
+                    SlackDto.class);
         } catch (RestClientException ex) {
             throw new SlackApiPostUnexpectedException(ex);
         }
