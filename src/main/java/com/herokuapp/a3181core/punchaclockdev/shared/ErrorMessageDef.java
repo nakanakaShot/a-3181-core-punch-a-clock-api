@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorMessageDef {
     FAILED_TO_POST("投稿に失敗しました。", HttpStatus.BAD_REQUEST),
+    FAILED_TO_SLACK_API_POST("SlackAPIへの投稿に失敗しました。", HttpStatus.BAD_REQUEST),
     FAILED_TO_ACCESS("サーバーにアクセスできませんでした。", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String message;
